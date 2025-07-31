@@ -134,5 +134,27 @@ app.put("/users/:id", (req, res) => {
   res.send(user);
 });
 
+// Delete a user
+// localhost:3000/users/1
+app.delete("/users/:id", (req, res) => {
+  // We can grab id from url query parameters
+  var id = parseInt(req.params.id); //convert string to integer
+  // find the user with id, the result will be an object or undefined
+  var user = users.find((u) => {
+    return u.id === id;
+  });
+
+  // if user not found return 404
+  if (!user) {
+    res.status(404).send({ message: "User not found." });
+  }
+  // find the index of user
+  var indexOfUser = users.indexOf(user);
+  // delete the user
+  users.splice(indexOfUser, 1);
+  // return the deleted record to update the client
+  res.send(user);
+});
+
 // localhost:3000 OR 127.0.0.1:3000 both reference the current server
 app.listen(3000);
