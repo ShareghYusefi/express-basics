@@ -112,5 +112,27 @@ app.patch("/users/:id", (req, res) => {
   res.send(user);
 });
 
+// Put to override user object
+// localhost:3000/users/1
+app.put("/users/:id", (req, res) => {
+  // We can grab id from url query parameters
+  var id = parseInt(req.params.id); //convert string to integer
+  // find the user with id, the result will be an object or undefined
+  var user = users.find((u) => {
+    return u.id === id;
+  });
+
+  // if user not found return 404
+  if (!user) {
+    res.status(404).send({ message: "User not found." });
+  }
+  // override the user that is found
+  user.id = req.body.id;
+  user.username = req.body.username;
+  user.email = req.body.email;
+
+  res.send(user);
+});
+
 // localhost:3000 OR 127.0.0.1:3000 both reference the current server
 app.listen(3000);
