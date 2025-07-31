@@ -2,7 +2,12 @@
 // Express is used to create web server in node. Express works on a middlware concept (callback functions).
 const express = require("express");
 
+// cors is a middleware that allows us to make requests to the backend server from different domains.
+var cors = require("cors");
 const app = express();
+
+// use cors middleware
+app.use(cors());
 
 // A middleware is a function that has access to the request and response object
 // you can think of a middleware as a layer that sits between the request and response.
