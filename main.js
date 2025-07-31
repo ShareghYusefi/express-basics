@@ -15,14 +15,56 @@ function customMiddleware(req, res, next) {
 // use the middleware function when a request comes in from the web.
 app.use(customMiddleware);
 
-// localhost:3000/
-app.get("/", (req, res) => {
-  res.send("Hello World");
+// What is a Restful API?
+// Restful stands for Representational Stte Transfer.
+// API stands for Application Programming Interface.
+// A way to design your URL's to interact with the server.
+
+// API's use HTTP methods to interact with ther server.
+// GET - Get data
+// POST - Send data
+// PATCH - Update data
+// PUT - Override data
+// DELETE - Delete data
+
+// Response contains an HTTP Status Code
+// These are codes are used to represent the status of the response from server.
+// 200 - Success/Ok
+// 201 - Created
+// 404 - Not Found
+// 400 - Bad Request
+// 500 - Internal Server Error
+
+// URL stand for Uniform Resource Locator
+// Resource is any type of data that we are storing on the server
+
+// Mock data in Memory (instead of getting data from a database)
+const users = [
+  { id: 1, username: "JohnDoe", email: "JohnDoe@gmail.com" },
+  { id: 2, username: "JaneDoe", email: "JaneDoe@gmail.com" },
+  { id: 3, username: "JamesDoe", email: "JamesDoe@gmail.com" },
+];
+
+// localhost:3000/users
+app.get("/users", (req, res) => {
+  res.status(200).send(users);
 });
 
-// localhost:3000/hello2
-app.get("/hello2", (req, res) => {
-  res.send("Hello World 2.0");
+// localhost:3000/users/1
+app.get("/users/:id", (req, res) => {
+  // We can grab id from url query parameters
+  var id = parseInt(req.params.id); //convert string to integer
+  // find the user with id, the result will be an object or undefined
+  var user = users.find((u) => {
+    return u.id === id;
+  });
+
+  // if user not found return 404
+  if (!user) {
+    res.status(404).send({ message: "User not found." });
+  }
+
+  res.send(user);
 });
 
 // localhost:3000 OR 127.0.0.1:3000 both reference the current server
