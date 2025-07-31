@@ -38,6 +38,13 @@ app.use(customMiddleware);
 // URL stand for Uniform Resource Locator
 // Resource is any type of data that we are storing on the server
 
+// use a built in middleware to parse the body of the request into an object
+app.use(
+  express.urlencoded({
+    extended: true, // parse nested objects within the request
+  })
+);
+
 // Mock data in Memory (instead of getting data from a database)
 const users = [
   { id: 1, username: "JohnDoe", email: "JohnDoe@gmail.com" },
@@ -45,11 +52,13 @@ const users = [
   { id: 3, username: "JamesDoe", email: "JamesDoe@gmail.com" },
 ];
 
+// Get all users
 // localhost:3000/users
 app.get("/users", (req, res) => {
   res.status(200).send(users);
 });
 
+// Get a single user
 // localhost:3000/users/1
 app.get("/users/:id", (req, res) => {
   // We can grab id from url query parameters
@@ -65,6 +74,21 @@ app.get("/users/:id", (req, res) => {
   }
 
   res.send(user);
+});
+
+// Post to create a user
+// localhost:3000/users
+app.post("/users", (req, res) => {
+  var newUser = {
+    id: users.length + 1,
+    username: req.body.username,
+    email: req.body.email,
+  };
+
+  // update mock database/array with new user
+  users.push(newUser);
+
+  res.status(200).send(newUser);
 });
 
 // localhost:3000 OR 127.0.0.1:3000 both reference the current server
